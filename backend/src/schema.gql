@@ -2,10 +2,61 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type HelloWorldModel {
-  value: String!
+type UserModel {
+  id: ID!
+  email: String!
+  name: String!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AuthResponse {
+  accessToken: String!
+  user: UserModel!
+}
+
+type BlogModel {
+  id: ID!
+  title: String!
+  content: String!
+  authorId: String!
+  author: UserModel
+  createdAt: DateTime!
 }
 
 type Query {
-  sayHello: HelloWorldModel!
+  me: UserModel!
+  blogs: [BlogModel!]!
+  blog(id: String!): BlogModel
+}
+
+type Mutation {
+  register(input: RegisterInput!): AuthResponse!
+  login(input: LoginInput!): AuthResponse!
+  createBlog(input: CreateBlogInput!): BlogModel!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+  name: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateBlogInput {
+  title: String!
+  content: String!
+}
+
+type Subscription {
+  """Get notified when a new blog is created"""
+  blogCreated: BlogModel!
 }
